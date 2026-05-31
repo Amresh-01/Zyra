@@ -1,0 +1,63 @@
+{
+  "info": {
+    "_postman_id": "b62d69f8-0ba6-4340-9cd3-78f64e30b5be",
+    "name": "Zyra  Counselor Student Action Center",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44436051"
+  },
+  "item": [
+    {
+      "name": "Get student Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/students/action-center/stu_003",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "students",
+            "action-center",
+            "stu_003"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Changing Status of task",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"in_progress\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/tasks/status/tsk_013",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "tasks",
+            "status",
+            "tsk_013"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
