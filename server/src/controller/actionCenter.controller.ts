@@ -13,7 +13,7 @@ export const getActionCenter = asyncHandler(
       );
     }
 
-    const data = await getActionCenterData(studentId);
+    const data = await getActionCenterData(studentId as string);
 
     return res.status(200).json(
       new ApiResponse(

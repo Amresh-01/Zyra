@@ -1,6 +1,7 @@
 import { Student } from "../models/student.model";
 import { Task } from "../models/Task.model";
 import { Message } from "../models/Message.model";
+import ApiError from "../utils/ApiError";
 
 type RiskLevel = "low" | "medium" | "high" | "critical";
 
@@ -12,7 +13,7 @@ export const getActionCenterData = async (studentId: string) => {
   ]);
 
   if (!student) {
-    throw new Error("Student not found");
+    throw new ApiError(404, "Student not found");
   }
 
   const now = Date.now();
