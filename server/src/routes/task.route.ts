@@ -3,6 +3,6 @@ import { updateTaskStatus } from "../controller/task.controller";
 
 const router = Router();
 
-router.patch("/:taskId/status", updateTaskStatus);
+router.patch("/status/:taskId", updateTaskStatus);
 
 export default router;
