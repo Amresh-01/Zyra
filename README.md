@@ -172,3 +172,117 @@ Body:
 ```
 
 
+
+# Architecture Note
+
+## Design Approach
+
+The application follows a layered architecture:
+
+### Route Layer
+
+Responsible for HTTP routing and request mapping.
+
+Example:
+
+```txt
+Route → Controller
+```
+
+---
+
+### Controller Layer
+
+Handles:
+
+* Request validation
+* Response formatting
+* HTTP concerns
+
+Controllers contain no business logic.
+
+---
+
+### Service Layer
+
+Contains business logic.
+
+Example:
+
+* Aggregating student data
+* Calculating urgency score
+* Computing risk level
+* Generating Action Center insights
+
+This keeps logic reusable and testable.
+
+---
+
+### Data Layer
+
+MongoDB + Mongoose models:
+
+* Student
+* Task
+* Message
+
+Indexes are added on:
+
+* studentId
+* taskId
+* messageId
+* status
+* priority
+
+to improve query performance.
+
+---
+
+## Reliability
+
+Implemented:
+
+* Global error middleware
+* Request IDs for traceability
+* Structured request logging
+* Async error handling
+
+---
+
+## Performance
+
+Optimizations:
+
+* Parallel database fetching using Promise.all
+* Mongoose lean() queries
+* Indexed lookup fields
+* Aggregated calculations in memory after retrieval
+
+---
+
+## Testing
+
+### Integration Test
+
+Verifies:
+
+* Action Center endpoint returns expected aggregated data.
+
+### Frontend Test
+
+Verifies:
+
+* Action Center card renders correct risk level and counts.
+
+---
+
+## Future Improvements
+
+* Redis caching
+* Pagination for messages
+* MongoDB aggregation pipelines
+* OpenAPI / Swagger documentation
+* Authentication and authorization
+* Distributed tracing and monitoring
+
+
