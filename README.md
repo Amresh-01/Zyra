@@ -106,5 +106,69 @@ npm run test:frontend
 * Integration tests
 * Frontend component tests
 
+# API Contract
+
+## Get Action Center
+
+### Request
+
+GET
+
+```http
+/api/students/action-center/:studentId
+```
+
+Example:
+
+```http
+/api/students/action-center/stu_001
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Action Center fetched successfully",
+  "data": {
+    "student": {},
+    "tasks": {},
+    "messages": {},
+    "insights": {}
+  }
+}
+```
+
+---
+
+## Update Task Status
+
+### Request
+
+PATCH
+
+```http
+/api/tasks/:taskId/status
+```
+
+Body:
+
+```json
+{
+  "status": "completed"
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Task status updated successfully",
+  "data": {}
+}
+```
 
 
