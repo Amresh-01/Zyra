@@ -4,6 +4,15 @@
 
 This project implements the Action Center backend service for counselors to quickly assess student priorities, overdue work, unread communications, and risk level.
 
+---
+
+## 📖 API Documentation
+
+The complete API endpoints, request payloads, and response structures are fully documented using Postman. 
+
+👉 **[Explore the Zyra API Documentation](https://coders-0935.postman.co/workspace/My-Workspace~de84d656-a8f7-424d-8f83-dc3f98121138/collection/44436051-b62d69f8-0ba6-4340-9cd3-78f64e30b5be?action=share&source=copy-link&creator=44436051)**
+
+
 Built using:
 
 * Node.js
