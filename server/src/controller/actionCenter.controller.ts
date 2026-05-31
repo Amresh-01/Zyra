@@ -5,15 +5,15 @@ import ApiResponse from "../utils/ApiResponse";
 import { getActionCenterData } from "../services/actionCenter.service";
 export const getActionCenter = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { studentId } = req.params;
 
-    if (!id) {
+    if (!studentId) {
       return res.status(400).json(
         new ApiResponse(400, null, "Student ID is required")
       );
     }
 
-    const data = await getActionCenterData(id);
+    const data = await getActionCenterData(studentId);
 
     return res.status(200).json(
       new ApiResponse(

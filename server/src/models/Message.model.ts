@@ -60,3 +60,8 @@ const messageSchema = new Schema<IMessage>(
     timestamps: true,
   }
 );
+
+export const Message = mongoose.model<IMessage>(
+  "Message",
+  messageSchema
+);
