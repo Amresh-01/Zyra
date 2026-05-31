@@ -1,22 +1,66 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
 import cors from "cors";
-import morgan from "morgan";
+import session from "express-session";
+
+import connectDB from "./db/db.connect";
+
+console.log("connectDB =", connectDB);
+
+dotenv.config();
 
 const app = express();
+const PORT: number = Number(process.env.PORT) || 8080;
 
-app.use(cors());
+// Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Zyra API is running",
-  });
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "someSecretKey",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Routes
+app.get("/", (_req: Request, res: Response) => {
+  res.send("Zyra Backend is Running...");
 });
 
-const PORT = process.env.PORT || 8080;
+// app.use("/api/user", userRoutes);
+// app.use("/api/foods", foodRoutes);
+// app.use("/api/order", orderRoutes);
+// app.use("/api/cart", cartRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const startServer = async (): Promise<void> => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(
+        `Server running at http://localhost:${PORT}`
+      );
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(
+        "Server startup failed:",
+        error.message
+      );
+    } else {
+      console.error("Unknown server error");
+    }
+
+    process.exit(1);
+  }
+};
+
+startServer();
