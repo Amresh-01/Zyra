@@ -6,8 +6,18 @@ import routes from "./src/routes";
 import { requestIdMiddleware } from "./src/middleware/requestId";
 import { requestLogger } from "./src/middleware/requestLogger";
 import { errorHandler } from "./src/middleware/errorHandler";
+import { messages } from "./src/data/messgae.data";
 
 const app = express();
+
+
+app.get("/", (req,res) => {
+  res.status(200).json({
+    success: true,
+    message: "Zyra backemd is Running",
+  });
+});
+
 
 app.use(cors());
 app.use(express.json());
