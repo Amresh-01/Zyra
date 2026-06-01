@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { Student } from "../models/student.model";
-import { Task } from "../models/task.model";
-import { Message } from "../models/message.model";
+import { Task } from "../models/Task.model";
+import { Message } from "../models/Message.model";
 
 dotenv.config();
 
