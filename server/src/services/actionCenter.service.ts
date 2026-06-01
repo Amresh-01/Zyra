@@ -75,6 +75,7 @@ export const getActionCenterData = async (studentId: string) => {
       summary: taskSummary,
       urgentTasks,
       overdueTasks,
+      list: tasks,
     },
 
     messages: {
