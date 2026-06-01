@@ -14,7 +14,7 @@ const app = express();
 app.get("/", (req,res) => {
   res.status(200).json({
     success: true,
-    message: "Zyra backemd is Running",
+    message: "Zyra backend is Running",
   });
 });
 
