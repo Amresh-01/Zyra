@@ -8,15 +8,18 @@
 
     "strict": true,
     "esModuleInterop": true,
-
+    
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-
-    "types": ["node", "jest"]
+    "forceConsistentCasingInFileNames": true
   },
 
   "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
+    "server.ts",
+    "src/**/*.ts"
+  ],
+
+  "exclude": [
+    "test",
+    "**/*.test.ts"
   ]
 }
