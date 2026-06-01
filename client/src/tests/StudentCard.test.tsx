@@ -1,4 +1,3 @@
-
 import { render, screen } from "@testing-library/react";
 import StudentCard from "../components/StudentCard";
 
@@ -7,8 +6,9 @@ describe("StudentCard", () => {
     render(
       <StudentCard
         student={{
+          studentId: "stu_001",
           name: "Maya Patel",
-          email: "maya@test.com",
+          email: "maya.patel@school.edu",
           grade: 11,
           gpa: 3.2,
           enrollmentStatus: "at_risk",
@@ -16,12 +16,9 @@ describe("StudentCard", () => {
       />
     );
 
+    expect(screen.getByText("Maya Patel")).toBeInTheDocument();
     expect(
-      screen.getByText("Maya Patel")
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(/Grade:/)
+      screen.getByText("maya.patel@school.edu")
     ).toBeInTheDocument();
   });
 });
