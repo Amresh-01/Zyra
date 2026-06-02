@@ -14,7 +14,7 @@ type DashboardData = {
     email: string;
     grade: number;
     gpa: number;
-    enrollmentStatus: string;
+    enrollmentStatus: "at_risk" | "active" | "inactive";
   };
 
   tasks: {
@@ -42,7 +42,7 @@ type DashboardData = {
 
   insights: {
     urgencyScore: number;
-    riskLevel: string;
+    riskLevel: "low" | "medium" | "high" | "critical";
   };
 };
 
