@@ -36,15 +36,15 @@ export const getActionCenter = async (studentId: string) => {
   }
 };
 
-export const updateTaskStatus = async (taskId: string, status: string) => {
-  try {
-    const { data } = await api.patch(`/tasks/status/${taskId}`, { status });
-    return data.data;
-  } catch (err) {
-    if (activeBaseUrl !== REMOTE_API_BASE) {
-      const { data } = await axios.patch(`${REMOTE_API_BASE}/tasks/status/${taskId}`, { status });
-      return data.data;
-    }
-    throw err;
-  }
-};
+// export const updateTaskStatus = async (taskId: string, status: string) => {
+//   try {
+//     const { data } = await api.patch(`/tasks/status/${taskId}`, { status });
+//     return data.data;
+//   } catch (err) {
+//     if (activeBaseUrl !== REMOTE_API_BASE) {
+//       const { data } = await axios.patch(`${REMOTE_API_BASE}/tasks/status/${taskId}`, { status });
+//       return data.data;
+//     }
+//     throw err;
+//   }
+// };

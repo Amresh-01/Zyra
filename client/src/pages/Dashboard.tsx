@@ -1,266 +1,83 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getActionCenter, updateTaskStatus } from "../api/actionsCenter";
+import { getActionCenter } from "../api/actionsCenter";
+
 import StudentCard from "../components/StudentCard";
 import InsightCard from "../components/InsightCard";
 import MessageList from "../components/MessageList";
 import TaskSummary from "../components/TaskSummary";
 
-type Task = {
-  taskId: string;
-  studentId: string;
-  title: string;
-  description: string;
-  status: "todo" | "in_progress" | "completed";
-  priority: "low" | "medium" | "high" | "urgent";
-  dueDate: string;
+type DashboardData = {
+  student: {
+    studentId: string;
+    name: string;
+    email: string;
+    grade: number;
+    gpa: number;
+    enrollmentStatus: string;
+  };
+
+  tasks: {
+    summary: {
+      total: number;
+      todo: number;
+      inProgress: number;
+      completed: number;
+    };
+    urgentTasks: number;
+    overdueTasks: number;
+  };
+
+  messages: {
+    unread: number;
+    recent: {
+      messageId: string;
+      from: string;
+      subject: string;
+      preview: string;
+      read: boolean;
+      receivedAt: string;
+    }[];
+  };
+
+  insights: {
+    urgencyScore: number;
+    riskLevel: string;
+  };
 };
 
 export default function Dashboard() {
   const { studentId } = useParams();
   const navigate = useNavigate();
-  const [data, setData] = useState<any>(null);
+
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (studentId) {
-      setLoading(true);
-      setError(null);
-      getActionCenter(studentId)
-        .then((res) => {
-          if (!res.tasks.list || res.tasks.list.length === 0) {
-            res.tasks.list = getFallbackTasks(studentId);
-          }
-          setData(res);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setError(
-            err.response?.data?.message ||
-              "Could not load student data. Please check the ID and try again."
-          );
-          setLoading(false);
-        });
-    }
-  }, [studentId]);
+    if (!studentId) return;
 
-const getFallbackTasks = (id: string): Task[] => {
-  const allFallbackTasks: Task[] = [
-    {
-      taskId: "tsk_001",
-      studentId: "stu_001",
-      title: "Submit FAFSA application",
-      description: "Deadline is approaching. Student has not started the form.",
-      status: "todo",
-      priority: "urgent",
-      dueDate: "2026-06-05",
-    },
-    {
-      taskId: "tsk_002",
-      studentId: "stu_001",
-      title: "Meet with math tutor",
-      description: "Failing algebra — tutoring sessions must begin immediately.",
-      status: "in_progress",
-      priority: "high",
-      dueDate: "2026-06-01",
-    },
-    {
-      taskId: "tsk_003",
-      studentId: "stu_001",
-      title: "Attendance improvement plan",
-      description: "Student missed 8 days this semester. Plan must be signed.",
-      status: "todo",
-      priority: "urgent",
-      dueDate: "2026-05-28",
-    },
-    {
-      taskId: "tsk_004",
-      studentId: "stu_001",
-      title: "Review college interest list",
-      description: "Compile 5 target schools based on GPA and interests.",
-      status: "todo",
-      priority: "medium",
-      dueDate: "2026-07-01",
-    },
-    {
-      taskId: "tsk_005",
-      studentId: "stu_001",
-      title: "Parent meeting scheduled",
-      description: "Coordinate a meeting with guardian to discuss current standing.",
-      status: "completed",
-      priority: "high",
-      dueDate: "2026-05-18",
-    },
-    {
-      taskId: "tsk_006",
-      studentId: "stu_002",
-      title: "Finalise Common App essay",
-      description: "Essay draft reviewed — needs final polish before submission.",
-      status: "in_progress",
-      priority: "high",
-      dueDate: "2026-06-08",
-    },
-    {
-      taskId: "tsk_007",
-      studentId: "stu_002",
-      title: "Request teacher recommendations",
-      description: "Two letters needed. One confirmed, one pending.",
-      status: "in_progress",
-      priority: "medium",
-      dueDate: "2026-06-04",
-    },
-    {
-      taskId: "tsk_008",
-      studentId: "stu_002",
-      title: "Send official transcripts",
-      description: "All 6 schools require official transcripts via Naviance.",
-      status: "completed",
-      priority: "urgent",
-      dueDate: "2026-05-13",
-    },
-    {
-      taskId: "tsk_009",
-      studentId: "stu_002",
-      title: "Scholarship research",
-      description: "Identify 3 scholarships relevant to intended major.",
-      status: "todo",
-      priority: "low",
-      dueDate: "2026-07-18",
-    },
-    {
-      taskId: "tsk_010",
-      studentId: "stu_003",
-      title: "Credit recovery: English 10",
-      description: "Must complete online modules to recover failing grade.",
-      status: "todo",
-      priority: "urgent",
-      dueDate: "2026-05-30",
-    },
-    {
-      taskId: "tsk_011",
-      studentId: "stu_003",
-      title: "Behavioural support referral",
-      description: "Refer student to student support services after incident report.",
-      status: "in_progress",
-      priority: "high",
-      dueDate: "2026-06-02",
-    },
-    {
-      taskId: "tsk_012",
-      studentId: "stu_003",
-      title: "Explore vocational pathways",
-      description: "Student expressed interest in trades. Share relevant programs.",
-      status: "todo",
-      priority: "medium",
-      dueDate: "2026-06-18",
-    },
-    {
-      taskId: "tsk_013",
-      studentId: "stu_003",
-      title: "Initial counselling intake",
-      description: "First formal session completed. Notes filed.",
-      status: "completed",
-      priority: "high",
-      dueDate: "2026-05-11",
-    },
-  ];
+    setLoading(true);
+    setError(null);
 
-  const studentTasks = allFallbackTasks.filter((t) => t.studentId === id);
-  if (studentTasks.length > 0) return studentTasks;
+    getActionCenter(studentId)
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
 
-  return [
-    {
-      taskId: `tsk_gen_${id}_1`,
-      studentId: id,
-      title: "Initial counselor intake session",
-      description: "Review academic standing and establish counseling goals.",
-      status: "todo",
-      priority: "high",
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    },
-    {
-      taskId: `tsk_gen_${id}_2`,
-      studentId: id,
-      title: "Review course requirements",
-      description: "Audit credits to ensure graduation pathways are met.",
-      status: "in_progress",
-      priority: "medium",
-      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    },
-  ];
-};
-
-  const handleUpdateTaskStatus = async (taskId: string, newStatus: "todo" | "in_progress" | "completed") => {
-    try {
-      // Send updates to backend (remote or local)
-      await updateTaskStatus(taskId, newStatus);
-
-      // Recalculate frontend state locally for instantaneous user feedback
-      setData((prev: any) => {
-        if (!prev) return prev;
-
-        // 1. Update the status of the specific task in the list
-        const updatedList = (prev.tasks.list || []).map((t: Task) =>
-          t.taskId === taskId ? { ...t, status: newStatus } : t
+        setError(
+          err.response?.data?.message ||
+            "Could not load student data. Please check the ID and try again."
         );
 
-        // 2. Recalculate summary metrics
-        const total = updatedList.length;
-        const todo = updatedList.filter((t: Task) => t.status === "todo").length;
-        const inProgress = updatedList.filter((t: Task) => t.status === "in_progress").length;
-        const completed = updatedList.filter((t: Task) => t.status === "completed").length;
-
-        // 3. Recalculate urgent and overdue task counts
-        const urgentTasks = updatedList.filter((t: Task) => t.priority === "urgent").length;
-        
-        const now = Date.now();
-        let overdueTasks = 0;
-        let urgencyScore = 0;
-
-        for (const t of updatedList) {
-          // Priority additions
-          if (t.status === "todo") urgencyScore += 1;
-          if (t.status === "in_progress") urgencyScore += 0.5;
-
-          if (t.priority === "urgent") urgencyScore += 3;
-          else if (t.priority === "high") urgencyScore += 2;
-          else if (t.priority === "medium") urgencyScore += 1;
-
-          // Overdue calculation
-          if (new Date(t.dueDate).getTime() < now && t.status !== "completed") {
-            urgencyScore += 4;
-            overdueTasks++;
-          }
-        }
-
-        // Calculate risk levels
-        let riskLevel: "low" | "medium" | "high" | "critical" = "low";
-        if (urgencyScore >= 15) riskLevel = "critical";
-        else if (urgencyScore >= 10) riskLevel = "high";
-        else if (urgencyScore >= 5) riskLevel = "medium";
-
-        return {
-          ...prev,
-          tasks: {
-            ...prev.tasks,
-            summary: { total, todo, inProgress, completed },
-            urgentTasks,
-            overdueTasks,
-            list: updatedList,
-          },
-          insights: {
-            urgencyScore,
-            riskLevel,
-          },
-        };
+        setLoading(false);
       });
-    } catch (err: any) {
-      alert("Failed to update task status: " + (err.response?.data?.message || err.message));
-    }
-  };
+  }, [studentId]);
 
+  // rest of your component stays exactly the same
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
@@ -329,7 +146,11 @@ const getFallbackTasks = (id: string): Task[] => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Column 1 & 2: Tasks List */}
           <div className="lg:col-span-2 space-y-6">
-            <TaskSummary tasks={data.tasks} onUpdateStatus={handleUpdateTaskStatus} />
+            <TaskSummary
+                summary={data.tasks.summary}
+                urgentTasks={data.tasks.urgentTasks}
+                overdueTasks={data.tasks.overdueTasks}
+            />
           </div>
 
           {/* Column 3: Insights and Messages */}
